@@ -1,0 +1,78 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS admin(
+  id SERIAL NOT NULL PRIMARY KEY,
+  name  VARCHAR(14) NOT NULL,
+  lastname  VARCHAR(14) NOT NULL,
+  email  VARCHAR(40),
+  password  TEXT NOT NULL,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS adminvariable(
+  id SERIAL NOT NULL PRIMARY KEY,
+  name  VARCHAR(14) NOT NULL,
+  value  TEXT NOT NULL,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Coord(
+  id SERIAL NOT NULL PRIMARY KEY,
+  name  VARCHAR(14) NOT NULL,
+  lastname  VARCHAR(14) NOT NULL,
+  email  VARCHAR(40) NOT NULL UNIQUE,
+  password  TEXT NOT NULL,
+  status BOOLEAN DEFAULT true,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS teacher(
+  id SERIAL NOT NULL PRIMARY KEY,
+  name  VARCHAR(14) NOT NULL,
+  lastname  VARCHAR(14) NOT NULL,
+  email  VARCHAR(40) NOT NULL UNIQUE,
+  password  TEXT NOT NULL,
+  qrcodeurl  TEXT NOT NULL,
+  status INT DEFAULT 1,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS presence(
+  id SERIAL NOT NULL PRIMARY KEY,
+  teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
+  hour_in  VARCHAR(14) NOT NULL NOT NULL,
+  hour_out  VARCHAR(14) NOT NULL NOT NULL,
+  obs  VARCHAR(14) NOT NULL NOT NULL,
+  created_by TEXT NOT NULL,
+  status INT DEFAULT 1,
+  created_at  TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS hours(
+  id SERIAL NOT NULL PRIMARY KEY,
+  teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
+  week_day  VARCHAR(14) NOT NULL NOT NULL,
+  hour_start  VARCHAR(14) NOT NULL NOT NULL,
+  hour_end  VARCHAR(14) NOT NULL NOT NULL,
+  status INT DEFAULT 1,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS feria(
+  id SERIAL NOT NULL PRIMARY KEY,
+  teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
+  date_start  VARCHAR(14) NOT NULL NOT NULL,
+  date_end  VARCHAR(14) NOT NULL NOT NULL,
+  status INT DEFAULT 1,
+  created_at  TIMESTAMP DEFAULT now(),
+  updated_at  TIMESTAMP DEFAULT now()
+);
+
+
+COMMIT;

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",                     // Suporta a versão do JavaScript compatível com Node.js 23
+    "module": "NodeNext",                  // Usa o sistema de módulos mais recente para Node.js
+    "moduleResolution": "NodeNext",       // Resolve os módulos no estilo Node.js moderno
+    "strict": true,                       // Ativa todas as verificações estritas do TypeScript
+    "esModuleInterop": true,              // Garante compatibilidade com CommonJS e ES Modules
+    "forceConsistentCasingInFileNames": true, // Garante consistência nos nomes dos arquivos
+    "skipLibCheck": true,                 // Ignora checagem de tipos nas bibliotecas para melhorar desempenho
+    "allowSyntheticDefaultImports": true, // Permite imports padrão de módulos CommonJS
+    "outDir": "./dist",                   // Diretório de saída para os arquivos compilados
+    "rootDir": "./src",                   // Diretório raiz do código TypeScript
+    "resolveJsonModule": true,            // Permite importar arquivos JSON como módulos
+    "types": ["node"],                    // Adiciona suporte aos tipos do Node.js
+    "lib": ["ES2023"]                     // Usa bibliotecas mais modernas compatíveis com Node.js 23
+  },
+  "include": ["src/**/*.ts"],             // Inclui arquivos TypeScript na pasta "src"
+  "exclude": ["node_modules", "dist"]     // Exclui a pasta de saída e dependências
+}
