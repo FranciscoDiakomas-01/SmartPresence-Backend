@@ -2,22 +2,24 @@ import db from "../../src/database/dbConnection";
 import type IAdmin from "../../src/models/Admin";
 import type ILogin from "../types/ILogin";
 import { Decrypt } from "../util/password";
+import path from 'node:path'
+import fs from 'node:fs'
 
 class AdminServiceEmplemetation {
 
   #query : string = ""
-  async update( Admin : IAdmin){
+  public async update( Admin : IAdmin){
     this.#query = "UPDATE admin SET name = $1 , lastname = $2 , email = $3 , password = $4 , updated_at = now();"
     const { rowCount } = await db.query(this.#query , [Admin.name , Admin.lastname , Admin.email ,  Admin.password])
     return rowCount != 0 && rowCount != null
   }
-  async get(){
+  public async get(){
     this.#query = "SELECT name  , lastname , email  FROM admin;"
     const { rows } = await db.query(this.#query)
     return rows 
   }
 
-  async login(login : ILogin){
+  public async login(login : ILogin){
     this.#query = "SELECT id , password  FROM admin WHERE email = $1;"
     const { rows, rowCount } = await db.query(this.#query , [login.email])
     if(rowCount == 0){
@@ -29,6 +31,28 @@ class AdminServiceEmplemetation {
       return id
     }else{
       return "incorret credentials" 
+    }
+    
+  }
+
+  public  getAdminVariable(){
+    try {
+      const coordVariable = fs.readFileSync(path.join(process.cwd() + '/config/coord.txt'), { encoding : 'utf8'})
+      const teacherVariable = fs.readFileSync(path.join(process.cwd() + '/config/teacher.txt') , { encoding : 'utf8'})
+      return { coordVariable , teacherVariable}
+    } catch (error) {
+      return "Admin files config doesn´t found"
+    }
+    
+  }
+
+  public  UpdateAdminVariable(coord : string , teacher : string){
+    try {
+      fs.writeFileSync(path.join(process.cwd() + '/config/coord.txt') , coord , { encoding : 'utf8'})
+      fs.writeFileSync(path.join(process.cwd() + '/config/teacher.txt') , teacher , { encoding : 'utf8'})
+      return "updated"
+    } catch (error) {
+      return "Admin files config doesn´t found";
     }
     
   }

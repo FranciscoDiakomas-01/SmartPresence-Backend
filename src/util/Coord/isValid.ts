@@ -1,22 +1,20 @@
-import validator from 'validator'
-import type ICoord from '../../models/Coord';
-
-export default function isValidCoord(coord : ICoord){
-
+import validator from "validator";
+import IUser from "../../models/User";
+export default function isValidCoord(user: IUser) {
   try {
-    if(!validator.isEmail(coord.email)){
-      return "invalid email"
-    }if (!validator.isStrongPassword(coord.password)) {
+    if (!validator.isEmail(user.email)) {
+      return "invalid email";
+    }
+    if (!validator.isStrongPassword(user.password)) {
       return "invalid passsword";
-    } else if (coord?.name?.length < 3 || coord?.name?.length > 14) {
+    } else if (user?.name?.length < 3 || user?.name?.length > 14) {
       return "invalid name";
-    } else if (coord?.lastname?.length < 3 || coord?.lastname?.length > 14) {
+    } else if (user?.lastname?.length < 3 || user?.lastname?.length > 14) {
       return "invalid lastname";
     } else {
       return "valid";
     }
   } catch (error) {
-      return "invalid coord"
+    return "invalid user";
   }
-
 }

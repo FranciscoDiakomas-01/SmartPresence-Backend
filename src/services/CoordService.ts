@@ -1,17 +1,18 @@
 import db from "../database/dbConnection";
-import type ICoord from "../models/Coord";
-import { Encrypt } from "../util/password";
+import type IUser from "../models/User";
+import type ILogin from "../types/ILogin";
+import { Decrypt, Encrypt } from "../util/password";
 
 class CoordServiceEmplementation {
   #query: string = "";
 
-  async create(coord: ICoord) {
-    this.#query = "INSERT INTO coord(name , lastname , email , password) VALUES($1 , $2 , $3 , $4)";
+  async create(coord: IUser) {
+    this.#query =
+      "INSERT INTO coord(name , lastname , email , password) VALUES($1 , $2 , $3 , $4)";
     return new Promise((resolve, reject) => {
-      const encpassword = Encrypt(coord.password);
       db.query(
         this.#query,
-        [coord.name, coord.lastname, coord.email, encpassword],
+        [coord.name, coord.lastname, coord.email, coord.password],
         (err, data) => {
           if (err) {
             reject("already exist");
@@ -25,7 +26,7 @@ class CoordServiceEmplementation {
     });
   }
 
-  async update(coord: ICoord): Promise<string | number> {
+  async update(coord: IUser): Promise<string | number> {
     this.#query =
       "UPDATE coord SET name = $1 , lastname = $2, email = $3, password = $4 , updated_at = now() WHERE id = $5;";
     return new Promise((resolve, reject) => {
@@ -48,7 +49,23 @@ class CoordServiceEmplementation {
 
   async getAll(limit: number, page: number) {
     this.#query =
-      "SELECT name , lastname , email , status FROM coord OFFSET $1 LIMIT $2;";
+      "SELECT  id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at FROM coord OFFSET $1 LIMIT $2;";
+    const { rowCount } = await db.query("SELECT id from coord;");
+    const offset = (page - 1) * limit;
+    const lastpage = Math.ceil(Number(rowCount) / limit);
+    const { rows } = await db.query(this.#query, [offset, limit]);
+    const response = {
+      data: rows,
+      total: rowCount,
+      lastpage,
+      limit,
+      page,
+    };
+    return response;
+  }
+
+  async getAllBySearchText(limit: number, page: number, filter: string) {
+    this.#query = `SELECT  id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at  FROM coord WHERE name LIKE '%${filter}%' OR lastname LIKE '%${filter}%'  OR email LIKE '%${filter}%' ORDER BY id OFFSET $1 LIMIT $2;`;
     const { rowCount } = await db.query("SELECT id from coord;");
     const offset = (page - 1) * limit;
     const lastpage = Math.ceil(Number(rowCount) / limit);
@@ -75,10 +92,26 @@ class CoordServiceEmplementation {
     return rowCount != null && rowCount != 0;
   }
   async getbyid(id: number) {
-    this.#query = "SELECT name , lastname , email , status FROM coord WHERE id = $1";
-    const { rowCount , rows} = await db.query(this.#query, [id]);
+    this.#query =
+      "SELECT id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at FROM coord WHERE id = $1";
+    const { rowCount, rows } = await db.query(this.#query, [id]);
     return rowCount != null && rowCount != 0 ? rows : "not found";
   }
+
+  async login(login: ILogin) {
+    this.#query = "SELECT id , password  FROM coord WHERE email = $1 AND status = true;";
+    const { rows, rowCount } = await db.query(this.#query, [login.email]);
+    if (rowCount == 0) {
+      return "not found";
+    }
+    const id = rows[0]?.id;
+    const password = Decrypt(String(rows[0]?.password));
+    if (password == login.password) {
+      return id;
+    } else {
+      return "incorret credentials";
+    }
+  }
 }
-const CoordSerice = new CoordServiceEmplementation()
-export default CoordSerice
+const CoordSerice = new CoordServiceEmplementation();
+export default CoordSerice;
