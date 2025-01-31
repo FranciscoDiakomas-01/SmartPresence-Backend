@@ -1,4 +1,4 @@
-import db from "../../src/database/dbConnection";
+import db from "../database/dbConnection";
 import type IAdmin from "../../src/models/Admin";
 import type ILogin from "../types/ILogin";
 import { Decrypt } from "../util/password";

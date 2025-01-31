@@ -1,9 +1,10 @@
 export default interface IPresence {
   id: number;
-  prof_id: number;
-  date_in: string;
-  date_out: string;
+  teacher_id: number;
+  token_teacher: string;
+  date: string;
+  hour: string;
   status: "Prensete" | "Ausente" | "Pendente";
   obs: string;
-  created_at: string;
+  today : string
 }

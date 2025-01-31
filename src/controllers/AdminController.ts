@@ -89,7 +89,7 @@ const AdminController = {
         });
         return;
       }
-      const token = GenerateToken(response, true);
+      const token = GenerateToken(response, "admin");
       res.status(200).json({
         token,
         msg: "wellcome admin",

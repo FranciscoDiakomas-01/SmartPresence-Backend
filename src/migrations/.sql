@@ -31,40 +31,24 @@ CREATE TABLE IF NOT EXISTS teacher(
   qrcodeurl  TEXT NOT NULL,
   status INT DEFAULT 1,
   created_at  TIMESTAMP DEFAULT now(),
-  updated_at  TIMESTAMP
+  updated_at  TIMESTAMP,
+  vocation_date VARCHAR(20) DEFAULT "no"
 );
 
 CREATE TABLE IF NOT EXISTS presence(
   id SERIAL NOT NULL PRIMARY KEY,
   teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
-  hour_in  VARCHAR(14) NOT NULL NOT NULL,
-  hour_out  VARCHAR(14) NOT NULL NOT NULL,
+  date  VARCHAR(60) NOT NULL NOT NULL,
   obs  VARCHAR(14) NOT NULL NOT NULL,
-  created_by TEXT NOT NULL,
-  status INT DEFAULT 1,
-  created_at  TIMESTAMP DEFAULT now()
+  status INT DEFAULT 1
 );
 
-CREATE TABLE IF NOT EXISTS hours(
+CREATE TABLE IF NOT EXISTS calendar(
   id SERIAL NOT NULL PRIMARY KEY,
   teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
   week_day  VARCHAR(14) NOT NULL NOT NULL,
   hour_start  VARCHAR(14) NOT NULL NOT NULL,
-  hour_end  VARCHAR(14) NOT NULL NOT NULL,
-  status INT DEFAULT 1,
-  created_at  TIMESTAMP DEFAULT now(),
-  updated_at  TIMESTAMP DEFAULT now()
+  hour_end  VARCHAR(14) NOT NULL NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS feria(
-  id SERIAL NOT NULL PRIMARY KEY,
-  teacher_id SERIAL NOT NULL REFERENCES teacher(id) ON DELETE CASCADE,
-  date_start  VARCHAR(14) NOT NULL NOT NULL,
-  date_end  VARCHAR(14) NOT NULL NOT NULL,
-  status INT DEFAULT 1,
-  created_at  TIMESTAMP DEFAULT now(),
-  updated_at  TIMESTAMP DEFAULT now()
-);
-
 
 COMMIT;

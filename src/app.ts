@@ -5,7 +5,8 @@ import helmet from 'helmet'
 import CoordRouter from './routes/CoordRoute'
 import AdminRouter from './routes/AdminRoute'
 import TeacherRouter from './routes/TeacherRoute'
-import VerifyHeaders from './middlewares/headers'
+import CalendarRoute from './routes/CalendarRoute'
+import PresenceRoute from './routes/PresenceRoute'
 dotenv.config()
 
 const app = express()
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended : true}))
 app.use(CoordRouter)
 app.use(AdminRouter);
 app.use(TeacherRouter)
-app.use(VerifyHeaders)
+app.use(CalendarRoute)
+app.use(PresenceRoute)
 
 export default app

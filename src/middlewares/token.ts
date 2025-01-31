@@ -3,12 +3,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export default function GenerateToken(id : number , isadm: boolean | string = false) {
+export default function GenerateToken(id : number , isadm:string) {
   const token = jsonwebtoken.sign({ id, isadm  }, String(process.env.JWT));
   return token
 }
 
-export  function extractIdInTokem(token : string) {
+export  function extractIdInTokem(token : string)   {
   try {
     const decodetoken = jsonwebtoken.decode(token)
     return decodetoken;
