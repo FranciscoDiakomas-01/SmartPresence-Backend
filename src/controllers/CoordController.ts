@@ -39,11 +39,7 @@ const CoordController = {
       return;
     }
     if (isAdmin(token)) {
-      let page = Number(req.query.page);
-      let limit = Number(req.query.limit);
-      page = Number.isNaN(page) ? 1 : page;
-      limit = Number.isNaN(limit) ? 20 : limit;
-      const data = await CoordSerice.getAllBySearchText(limit, page, filter);
+      const data = await CoordSerice.getAllBySearchText(filter);
       res.status(200).json(data);
     } else {
       res.status(403).json({

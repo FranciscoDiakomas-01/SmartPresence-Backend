@@ -64,18 +64,11 @@ class CoordServiceEmplementation {
     return response;
   }
 
-  async getAllBySearchText(limit: number, page: number, filter: string) {
-    this.#query = `SELECT  id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at  FROM coord WHERE name LIKE '%${filter}%' OR lastname LIKE '%${filter}%'  OR email LIKE '%${filter}%' ORDER BY id OFFSET $1 LIMIT $2;`;
-    const { rowCount } = await db.query("SELECT id from coord;");
-    const offset = (page - 1) * limit;
-    const lastpage = Math.ceil(Number(rowCount) / limit);
-    const { rows } = await db.query(this.#query, [offset, limit]);
+  async getAllBySearchText(filter: string) {
+    this.#query = `SELECT  id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at  FROM coord WHERE name LIKE '%${filter}%' OR lastname LIKE '%${filter}%'  OR email LIKE '%${filter}%' ORDER BY id;`;
+    const { rows } = await db.query(this.#query);
     const response = {
       data: rows,
-      total: rowCount,
-      lastpage,
-      limit,
-      page,
     };
     return response;
   }

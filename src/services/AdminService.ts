@@ -16,7 +16,7 @@ class AdminServiceEmplemetation {
   public async get(){
     this.#query = "SELECT name  , lastname , email  FROM admin;"
     const { rows } = await db.query(this.#query)
-    return rows 
+    return rows[0] 
   }
 
   public async login(login : ILogin){
@@ -34,7 +34,13 @@ class AdminServiceEmplemetation {
     }
     
   }
-
+  public async dahsBoard(){
+    this.#query = "SELECT count(*)  as total FROM coord;"
+    const { rows : total_coord} = await db.query(this.#query)
+    this.#query = "SELECT count(*) as total FROM teacher;";
+    const { rows : total_teacher } = await db.query(this.#query);
+    return { total_teacher: total_teacher[0].total, total_coord: total_coord[0].total };
+  }
   public  getAdminVariable(){
     try {
       const coordVariable = fs.readFileSync(path.join(process.cwd() + '/config/coord.txt'), { encoding : 'utf8'})

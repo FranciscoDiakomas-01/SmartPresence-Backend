@@ -37,9 +37,20 @@ const AdminController = {
     const token: string = req.body.token;
     if (isAdmin(token)) {
       const data = await AdminService.get();
-      res.status(201).json({
-        data,
+      res.status(201).json(data);
+    } else {
+      res.status(403).json({
+        msg: "doesnt have permition",
       });
+      return;
+    }
+  },
+
+  async dashBoard(req: Request, res: Response) {
+    const token: string = req.body.token;
+    if (isAdmin(token)) {
+      const data = await AdminService.dahsBoard();
+      res.status(201).json(data);
     } else {
       res.status(403).json({
         msg: "doesnt have permition",
@@ -50,7 +61,7 @@ const AdminController = {
   async getAdminVariable(req: Request, res: Response) {
     const token: string = req.body.token;
     if (isAdmin(token)) {
-      const data =  AdminService.getAdminVariable();
+      const data = AdminService.getAdminVariable();
       res.status(201).json(data);
     } else {
       res.status(403).json({
@@ -61,15 +72,18 @@ const AdminController = {
   },
   async updateAdminVariable(req: Request, res: Response) {
     const token: string = req.body.token;
-    const admimVariables : AdminVariables = req.body
+    const admimVariables: AdminVariables = req.body;
     if (isAdmin(token)) {
-      if(isValidAdminVariables(admimVariables) == "valid"){
-        const data = AdminService.UpdateAdminVariable(admimVariables.coord ,admimVariables.teacher);
-        res.status(201).json({ data});
-        return
-      }else{
-        res.status(400).json({smg : "invalid variables"})
-        return
+      if (isValidAdminVariables(admimVariables) == "valid") {
+        const data = AdminService.UpdateAdminVariable(
+          admimVariables.coord,
+          admimVariables.teacher
+        );
+        res.status(201).json({ data });
+        return;
+      } else {
+        res.status(400).json({ smg: "invalid variables" });
+        return;
       }
     } else {
       res.status(403).json({
