@@ -9,7 +9,7 @@ export default async function isTeacherAcountOwner(teacher: IUser) {
     try {
       const { rowCount, rows } = await db.query(query, [teacher?.id]);
       if (rowCount == 0 || rowCount == null) {
-        reject("not found");
+        reject("Conta não encotrada");
         return;
       } else {
         if (teacher?.oldemail == rows[0]?.email) {
@@ -18,11 +18,11 @@ export default async function isTeacherAcountOwner(teacher: IUser) {
             resolve("owner");
             return;
           } else {
-            resolve("password doesn´t matct");
+            reject("As senhas não combinam");
             return;
           }
         } else {
-          reject("email doesn´t match");
+          reject("Os emails não combinam");
           return;
         }
       }

@@ -23,14 +23,14 @@ class AdminServiceEmplemetation {
     this.#query = "SELECT id , password  FROM admin WHERE email = $1;"
     const { rows, rowCount } = await db.query(this.#query , [login.email])
     if(rowCount == 0){
-      return "not found"
+      return "Admin não encontrado"
     }
     const id = rows[0]?.id
     const password = Decrypt(String(rows[0]?.password));
     if(password == login.password){
       return id
     }else{
-      return "incorret credentials" 
+      return "Credenciais incorretas" 
     }
     
   }
@@ -56,7 +56,7 @@ class AdminServiceEmplemetation {
     try {
       fs.writeFileSync(path.join(process.cwd() + '/config/coord.txt') , coord , { encoding : 'utf8'})
       fs.writeFileSync(path.join(process.cwd() + '/config/teacher.txt') , teacher , { encoding : 'utf8'})
-      return "updated"
+      return "Variáveis Actualizado"
     } catch (error) {
       return "Admin files config doesn´t found";
     }

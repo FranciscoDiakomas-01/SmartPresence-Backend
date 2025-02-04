@@ -6,13 +6,13 @@ export default function isValidAdmin(Admin : IAdmin){
 
   try {
     if(!validator.isStrongPassword(Admin.password)){
-      return "invalid password"
+      return "Senha fraca"
     }else if(!validator.isEmail(Admin.email)){
-      return "invalid email"
+      return "Email inválido"
     }else if(Admin.name?.length < 3){
-      return "invalid name"
+      return "Nome inválido"
     }else if(Admin.lastname?.length < 3){
-      return "invalid lastname"
+      return "Sobrenome inválido"
     }else{
       return "valid"
     }

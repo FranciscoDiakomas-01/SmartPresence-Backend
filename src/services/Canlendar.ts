@@ -16,7 +16,7 @@ class CalendarServiceEmplemetation {
   }
 
   async get(teacherid: number) {
-    this.#query = "SELECT week_day , hour_start , hour_end  FROM calendar WHERE teacher_id  = $1;";
+    this.#query = "SELECT week_day , id , hour_start , hour_end  FROM calendar WHERE teacher_id  = $1;";
     const { rows } = await db.query(this.#query, [teacherid]);
     const response = {
       data: rows,

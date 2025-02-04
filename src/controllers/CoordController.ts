@@ -19,8 +19,8 @@ const CoordController = {
     if (isAdmin(token)) {
       let page = Number(req.query.page);
       let limit = Number(req.query.limit);
-      page = Number.isNaN(page) ? 1 : page;
-      limit = Number.isNaN(limit) ? 20 : limit;
+      page = Number.isNaN(page) || page == 0 ? 1 : page;
+      limit = Number.isNaN(limit) || limit == 0 ? 20 : limit;
       const data = await CoordSerice.getAll(limit, page);
       res.status(200).json(data);
     } else {
@@ -151,7 +151,7 @@ const CoordController = {
       }
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permisão recusada",
       });
       return;
     }
@@ -187,7 +187,7 @@ const CoordController = {
       const response = await CoordSerice.login(login);
       if (isNaN(response)) {
         res.status(400).json({
-          msg: "wrong credentials coord",
+          error: "Credenciais inválidas",
         });
         return;
       }
@@ -199,7 +199,7 @@ const CoordController = {
       return;
     } else {
       res.status(400).json({
-        error: "invalid email or password",
+        error: "Email ou senha inválida",
       });
       return;
     }

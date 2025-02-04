@@ -88,21 +88,21 @@ class CoordServiceEmplementation {
     this.#query =
       "SELECT id , name , lastname , email , status , to_char(created_at, 'YYYY:MM:DD') as created_at FROM coord WHERE id = $1";
     const { rowCount, rows } = await db.query(this.#query, [id]);
-    return rowCount != null && rowCount != 0 ? rows : "not found";
+    return rowCount != null && rowCount != 0 ? rows[0] : "not found";
   }
 
   async login(login: ILogin) {
     this.#query = "SELECT id , password  FROM coord WHERE email = $1 AND status = true;";
     const { rows, rowCount } = await db.query(this.#query, [login.email]);
     if (rowCount == 0) {
-      return "not found";
+      return "Conta não encotrada";
     }
     const id = rows[0]?.id;
     const password = Decrypt(String(rows[0]?.password));
     if (password == login.password) {
       return id;
     } else {
-      return "incorret credentials";
+      return "Credenciais incorretas";
     }
   }
 }

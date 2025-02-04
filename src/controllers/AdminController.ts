@@ -8,27 +8,39 @@ import GenerateToken from "../middlewares/token";
 import isAdmin from "../util/Admin/isAdmin";
 import type AdminVariables from "../types/AdminVariable";
 import isValidAdminVariables from "../util/Admin/isValidVariables";
+import { Encrypt } from "../util/password";
+import isAdminAcountOwner from "../util/Admin/isAdminOwnerAcount";
 const AdminController = {
-  update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const Admin: IAdmin = req.body;
     const token: string = req.body.token;
     if (isAdmin(token)) {
       const isvalid = isValidAdmin(Admin);
       if (isvalid == "valid") {
-        AdminService.update(Admin);
-        res.status(201).json({
-          msg: "updated",
-        });
-        return;
+        isAdminAcountOwner(Admin)
+          .then((data) => {
+            Admin.password = Encrypt(Admin.password);
+            AdminService.update(Admin);
+            res.status(201).json({
+              msg: "Perfil Altedado",
+            });
+            return;
+          })
+          .catch((err) => {
+            res.status(400).json({
+              msg: err,
+            });
+            return;
+          });
       } else {
         res.status(400).json({
-          error: isvalid,
+          msg: isvalid,
         });
         return;
       }
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permissão inválida",
       });
       return;
     }
@@ -40,7 +52,7 @@ const AdminController = {
       res.status(201).json(data);
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permissão inválida",
       });
       return;
     }
@@ -53,7 +65,7 @@ const AdminController = {
       res.status(201).json(data);
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permissão inválida",
       });
       return;
     }
@@ -65,7 +77,7 @@ const AdminController = {
       res.status(201).json(data);
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permissão inválida",
       });
       return;
     }
@@ -82,12 +94,12 @@ const AdminController = {
         res.status(201).json({ data });
         return;
       } else {
-        res.status(400).json({ smg: "invalid variables" });
+        res.status(400).json({ smg: "Váriáveis inválidas" });
         return;
       }
     } else {
       res.status(403).json({
-        msg: "doesnt have permition",
+        msg: "Permissão inválida",
       });
       return;
     }
@@ -99,23 +111,23 @@ const AdminController = {
       const response = await AdminService.login(login);
       if (isNaN(response)) {
         res.status(400).json({
-          msg: "wrong credentials admin",
+          error: "Credenciais incorretas",
         });
         return;
       }
       const token = GenerateToken(response, "admin");
       res.status(200).json({
         token,
-        msg: "wellcome admin",
+        msg: "Bem vindo admin",
       });
       return;
     } else {
       res.status(400).json({
-        error: "invalid email or password",
+        error: "Seu email ou senha está incorreto",
       });
       return;
     }
   },
 };
 
-export default AdminController
+export default AdminController;

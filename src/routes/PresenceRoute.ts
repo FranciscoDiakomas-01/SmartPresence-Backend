@@ -4,6 +4,7 @@ import PresenceController from "../controllers/PresenceController";
 const PresenceRoute = Router();
 PresenceRoute.get("/presence/:id", VerifyToken , PresenceController.getbyTeacher);
 PresenceRoute.get("/presence", VerifyToken, PresenceController.get);
+PresenceRoute.get("/teacherpresence", VerifyToken, PresenceController.getByTeacherToken);
 PresenceRoute.post("/presence", VerifyToken , PresenceController.create);
-PresenceRoute.put("/presence/:id", VerifyToken , PresenceController.update);
+PresenceRoute.put("/presence", VerifyToken , PresenceController.update);
 export default PresenceRoute;

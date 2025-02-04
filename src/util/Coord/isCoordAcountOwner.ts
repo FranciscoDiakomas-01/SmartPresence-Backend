@@ -9,7 +9,7 @@ export default async function isCoorAcountOwner(coord: IUser) {
     try {
       const { rowCount, rows } = await db.query(query, [coord?.id]);
       if (rowCount == 0 || rowCount == null) {
-        reject("not found");
+        reject("Conta não encotrada");
         return;
       } else {
         if (coord?.oldemail == rows[0]?.email) {
@@ -18,11 +18,11 @@ export default async function isCoorAcountOwner(coord: IUser) {
             resolve("owner");
             return;
           } else {
-            resolve("password doesn´t matct");
+            reject("Palavras passe incorreta");
             return;
           }
         } else {
-          reject("email doesn´t match");
+          reject("Email incorreto");
           return;
         }
       }

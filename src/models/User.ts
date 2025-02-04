@@ -8,7 +8,6 @@ export default interface IUser {
   password: string;
   oldpassword: string;
   oldemail: string;
-  qrcodeurl : string,
   status: "1" | "2" | "3";
   created_at: string;
   updated_at: string;

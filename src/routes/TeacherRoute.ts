@@ -4,6 +4,7 @@ import VerifyToken from "../middlewares/auth";
 const TeacherRouter = Router();
 
 TeacherRouter.get("/teachers", VerifyToken , TeacherController.get);
+TeacherRouter.get("/allteachers", VerifyToken, TeacherController.getAll);
 TeacherRouter.get("/teachers/search/:search", VerifyToken, TeacherController.getbySearchText);
 TeacherRouter.get("/teacher", VerifyToken, TeacherController.getbyid);
 TeacherRouter.post("/teacher", VerifyToken , TeacherController.create);

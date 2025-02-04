@@ -20,9 +20,22 @@ const TeacherController = {
     if (isAdmin(token)) {
       let page = Number(req.query.page);
       let limit = Number(req.query.limit);
-      page = Number.isNaN(page) ? 1 : page;
-      limit = Number.isNaN(limit) ? 20 : limit;
+      page = Number.isNaN(page) || page < 0 ? 1 : page;
+      limit = Number.isNaN(limit) || limit < 0 ? 15 : limit;
       const data = await TeacherService.getAll(limit, page);
+      res.status(200).json(data);
+    } else {
+      res.status(403).json({
+        msg: "doesnt have permition",
+      });
+    }
+    return;
+  },
+  getAll: async function (req: Request, res: Response) {
+    const token: string = req.body.token;
+    if (isAdmin(token)) {
+      let limit = Number(req.query.limit);
+      const data = await TeacherService.getAllNames(limit);
       res.status(200).json(data);
     } else {
       res.status(403).json({
@@ -90,10 +103,12 @@ const TeacherController = {
 
   create: async function (req: Request, res: Response) {
     const token: string = req.body.token;
-    const defaultTacherPassword = fs.readFileSync(path.join(process.cwd() + "/config/teacher.txt")).toString();
+    const defaultTacherPassword = fs
+      .readFileSync(path.join(process.cwd() + "/config/teacher.txt"))
+      .toString();
     if (isAdmin(token)) {
       const teacher: IUser = req.body;
-      teacher.qrcode = "http://localhost:8080/qrcode"
+      teacher.qrcode = "http://localhost:8080/qrcode";
       teacher.password = Encrypt(defaultTacherPassword);
       const isvalid = isValid(teacher);
       if (isvalid == "valid") {
@@ -166,25 +181,32 @@ const TeacherController = {
     if (isAdmin(token)) {
       const id = Number(req.body.id);
       const status = Number(req.body.status);
-      let vacation = req.body.vacation
-      if(!VacationDiff(vacation)){
-          res.status(400).json({
-            error: "invalid vacation",
-          });
-          return;
-      }
-      vacation = status != 3 ? "no" : vacation
-      if (!id || Number.isNaN(id)) {
+      let vacation = req.body.vacation;
+      const response = VacationDiff(vacation);
+      if (!VacationDiff(vacation)) {
         res.status(400).json({
-          error: "invalid id",
+          error: "invalid vacation",
         });
         return;
       }
-      await TeacherService.toogleStatus(id, status , vacation);
-      res.status(200).json({
-        updated: true,
-      });
-      return;
+      if (response == "apto") {
+        vacation = status != 3 ? "no" : vacation;
+        if (!id || Number.isNaN(id)) {
+          res.status(400).json({
+            error: "invalid id",
+          });
+          return;
+        }
+        await TeacherService.toogleStatus(id, status, vacation);
+        res.status(200).json({
+          updated: true,
+        });
+        return;
+      } else {
+        res.status(400).json({
+          error: response,
+        });
+      }
     } else {
       res.status(403).json({
         msg: "doesnt have permition",
@@ -199,7 +221,7 @@ const TeacherController = {
       const response = await TeacherService.login(login);
       if (isNaN(response)) {
         res.status(400).json({
-          msg: "wrong credentials teacher",
+          error: "Credenciais incorretas",
         });
         return;
       }

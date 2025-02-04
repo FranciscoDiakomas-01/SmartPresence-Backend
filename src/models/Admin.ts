@@ -6,4 +6,6 @@ export default interface IAdmin {
   password: string;
   created_at: string;
   updated_at: string;
+  oldpassword: string;
+  oldemail: string;
 }

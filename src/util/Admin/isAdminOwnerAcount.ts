@@ -1,28 +1,28 @@
 import db from "../../database/dbConnection";
-import type IUser from "../../models/User";
 import { Decrypt } from "../password";
-
-export default async function isAdminAcountOwner(coord: IUser) {
-  const query =
-    "SELECT id , email , password  FROM admin WHERE id = $1 LIMIT 1;";
+import type IAdmin from "../../models/Admin";
+export default async function isAdminAcountOwner(admin: IAdmin) {
+  const query = "SELECT id , email , password  FROM admin LIMIT 1;";
+  
   return new Promise(async (resolve, reject) => {
+
     try {
-      const { rowCount, rows } = await db.query(query, [coord?.id]);
+      const { rowCount, rows } = await db.query(query);
       if (rowCount == 0 || rowCount == null) {
-        reject("not found");
+        reject("Conta não encotrada");
         return;
       } else {
-        if (coord?.oldemail == rows[0]?.email) {
+        if (admin?.oldemail == rows[0]?.email) {
           const decrypedPassword = Decrypt(String(rows[0]?.password));
-          if (decrypedPassword == coord?.oldpassword) {
+          if (decrypedPassword == admin?.oldpassword) {
             resolve("owner");
             return;
           } else {
-            resolve("password doesn´t matct");
+            reject("Palavras passe não batem");
             return;
           }
         } else {
-          reject("email doesn´t match");
+          reject("Email não batem");
           return;
         }
       }

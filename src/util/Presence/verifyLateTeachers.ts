@@ -7,7 +7,6 @@ export default async function veriFyMissingTeachers() {
   const today = weekDays[date.getDay()]
   let query = "SELECT teacher_id , week_day FROM calendar WHERE week_day = $1"
   const { rowCount  , rows } =  await db.query(query , [today])
-
   if(rowCount == 0){
     console.log("No Pendete Teachers")
     return 
@@ -24,7 +23,7 @@ export default async function veriFyMissingTeachers() {
           return 
         }
         data.rows.map(async( presence) => {
-          if(presence?.status == 3 && date.getHours() == 18){
+          if(presence?.status == 3 && date.getHours() >= 19){
             query = "UPDATE presence SET status = 2 WHERE teacher_id = $1"
             await db.query(query , [teacher_id])
           }
