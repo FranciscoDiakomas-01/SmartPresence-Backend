@@ -54,7 +54,13 @@ const PresenceController = {
     const today = weekDays[date.getDay()];
 
     try {
-      const teacherId = extractIdInTokem(teachertoken) as { id: number };
+      const teacherId = extractIdInTokem(teachertoken) as { id: number; isadm : string };
+      if (!teacherId?.id || teacherId?.isadm != "teacher") {
+        res.status(400).json({
+          error: "Token inválido",
+        });
+        return
+      }
       if (!teachertoken || !date1 || Number.isNaN(hour) || !hour) {
         res.status(400).json({
           error: "Dados não providenciado",
