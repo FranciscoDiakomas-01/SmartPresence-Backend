@@ -31,12 +31,18 @@ setInterval(async () => {
   await veriFyMissingTeachers();
 }, 10000);
 
-
-InsertDeFaultAdmin()
-  .then(() => {
-    console.log("admin inserted");
-  })
-  .catch();
+setTimeout(() => {
+  InsertDeFaultAdmin()
+    .then(() => {
+      console.log("admin inserted");
+    })
+    .catch();
+}, 5000);
+server.get("/", (req, res) => {
+  res.status(200).json({
+    msg: "Bem vindo ao smart presence",
+  });
+});
 server.listen(port, () => {
   console.log(`Server runnig on http://localhost:${port}/`);
 });
