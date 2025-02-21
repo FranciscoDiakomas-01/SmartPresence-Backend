@@ -8,7 +8,7 @@ class TeacherServiceEmplementation {
   #query: string = "";
   async create(teacher: IUser) {
     this.#query =
-      "INSERT INTO teacher(name , lastname , email , password , qrcodeurl) VALUES($1 , $2 , $3 , $4 , $5)";
+      "INSERT INTO teacher(name , lastname , email , password , vocation_date ) VALUES($1 , $2 , $3 , $4 , 'no')";
     return new Promise((resolve, reject) => {
       db.query(
         this.#query,
@@ -17,7 +17,6 @@ class TeacherServiceEmplementation {
           teacher.lastname,
           teacher.email,
           teacher.password,
-          teacher.qrcode,
         ],
         (err, data) => {
           if (err) {

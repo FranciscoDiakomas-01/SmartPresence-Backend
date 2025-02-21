@@ -1,3 +1,4 @@
+-- Active: 1737546015276@@127.0.0.1@5432@smartpresence
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS admin(
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS teacher(
   status INT DEFAULT 1,
   created_at  TIMESTAMP DEFAULT now(),
   updated_at  TIMESTAMP,
-  vocation_date VARCHAR(20) DEFAULT "no"
+  vocation_date VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS presence(

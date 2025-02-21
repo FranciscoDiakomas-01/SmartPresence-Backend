@@ -12,7 +12,13 @@ export default async function RunMigration() {
       if(content.length == 0){
         throw new Error("Migration Empty Error")
       }
-      await db.query(content)
+      db.query(content , (err , result) => {
+        if(err){
+          console.log(err.message)
+          process.exit(1)
+          
+        }
+      });
     })
   }else{
     throw new Error("No Migration Found")

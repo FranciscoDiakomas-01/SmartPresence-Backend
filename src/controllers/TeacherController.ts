@@ -108,7 +108,6 @@ const TeacherController = {
       .toString();
     if (isAdmin(token)) {
       const teacher: IUser = req.body;
-      teacher.qrcode = "http://localhost:8080/qrcode";
       teacher.password = Encrypt(defaultTacherPassword);
       const isvalid = isValid(teacher);
       if (isvalid == "valid") {

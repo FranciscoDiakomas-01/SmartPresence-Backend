@@ -1,4 +1,4 @@
-import type IAdmin from "../models/Admin";
+
 import db from "./dbConnection";
 import dotenv from 'dotenv'
 import { Encrypt } from '../util/password';
@@ -7,7 +7,12 @@ dotenv.config()
 export default async function InsertDeFaultAdmin(){
 
   const password = Encrypt(String(process.env.ADMPASS));
-  const admin: Omit<IAdmin , "id" | "created_at" | "updated_at"> = {
+  const admin: {
+    email : string,
+    password : string,
+    name : string,
+    lastname : string
+  }  = {
     email: String(process.env.ADMEMAIL),
     password: password,
     name : "Francisco",
