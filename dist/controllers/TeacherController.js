@@ -11,9 +11,7 @@ const isValidLogin_1 = __importDefault(require("../util/Login/isValidLogin"));
 const isTeacher_1 = __importDefault(require("../util/Teacher/isTeacher"));
 const token_1 = __importDefault(require("../middlewares/token"));
 const isTeacherAcountOwner_1 = __importDefault(require("../util/Teacher/isTeacherAcountOwner"));
-const node_fs_1 = __importDefault(require("node:fs"));
 const validator_1 = __importDefault(require("validator"));
-const node_path_1 = __importDefault(require("node:path"));
 const isValidVacation_1 = __importDefault(require("../util/Calendar/isValidVacation"));
 const TeacherController = {
     get: async function (req, res) {
@@ -105,9 +103,7 @@ const TeacherController = {
     },
     create: async function (req, res) {
         const token = req.body.token;
-        const defaultTacherPassword = node_fs_1.default
-            .readFileSync(node_path_1.default.join(process.cwd() + "/config/teacher.txt"))
-            .toString();
+        const defaultTacherPassword = "Professor@01";
         if ((0, isAdmin_1.default)(token)) {
             const teacher = req.body;
             teacher.password = (0, password_1.Encrypt)(defaultTacherPassword);

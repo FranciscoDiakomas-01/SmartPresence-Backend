@@ -7,10 +7,10 @@ const pg_1 = require("pg");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const db = new pg_1.Pool({
-    user: process.env.DBUSER,
-    host: process.env.DBHOST,
-    port: Number(process.env.DBPORT),
-    database: process.env.DATABASE,
-    password: process.env.DBPASSWORD
+    connectionString: String(process.env.DBURL),
+    ssl: { rejectUnauthorized: false }
+});
+db.connect(() => {
+    console.log("co");
 });
 exports.default = db;

@@ -11,9 +11,7 @@ const isCoord_1 = __importDefault(require("../util/Coord/isCoord"));
 const isValidLogin_1 = __importDefault(require("../util/Login/isValidLogin"));
 const token_1 = __importDefault(require("../middlewares/token"));
 const isCoordAcountOwner_1 = __importDefault(require("../util/Coord/isCoordAcountOwner"));
-const node_fs_1 = __importDefault(require("node:fs"));
 const validator_1 = __importDefault(require("validator"));
-const node_path_1 = __importDefault(require("node:path"));
 const CoordController = {
     get: async function (req, res) {
         const token = req.body.token;
@@ -86,9 +84,7 @@ const CoordController = {
     },
     create: async function (req, res) {
         const token = req.body.token;
-        const defaultCoordPassword = node_fs_1.default
-            .readFileSync(node_path_1.default.join(process.cwd() + "/config/coord.txt"))
-            .toString();
+        const defaultCoordPassword = "Coord@01";
         if ((0, isAdmin_1.default)(token)) {
             const coord = req.body;
             coord.password = (0, password_1.Encrypt)(defaultCoordPassword);

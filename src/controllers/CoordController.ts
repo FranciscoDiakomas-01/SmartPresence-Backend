@@ -85,9 +85,7 @@ const CoordController = {
 
   create: async function (req: Request, res: Response) {
     const token: string = req.body.token;
-    const defaultCoordPassword = fs
-      .readFileSync(path.join(process.cwd() + "/config/coord.txt"))
-      .toString();
+    const defaultCoordPassword = "Coord@01";
     if (isAdmin(token)) {
       const coord: IUser = req.body;
       coord.password = Encrypt(defaultCoordPassword);

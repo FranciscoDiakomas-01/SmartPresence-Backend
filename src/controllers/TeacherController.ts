@@ -103,9 +103,7 @@ const TeacherController = {
 
   create: async function (req: Request, res: Response) {
     const token: string = req.body.token;
-    const defaultTacherPassword = fs
-      .readFileSync(path.join(process.cwd() + "/config/teacher.txt"))
-      .toString();
+    const defaultTacherPassword = "Professor@01";
     if (isAdmin(token)) {
       const teacher: IUser = req.body;
       teacher.password = Encrypt(defaultTacherPassword);
