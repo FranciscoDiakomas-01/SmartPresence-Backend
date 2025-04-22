@@ -27,6 +27,7 @@ class AdminServiceEmplemetation {
         }
         const id = rows[0]?.id;
         const password = (0, password_1.Decrypt)(String(rows[0]?.password));
+        console.log(password, login);
         if (password == login.password) {
             return id;
         }
