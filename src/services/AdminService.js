@@ -32,7 +32,7 @@ class AdminServiceEmplemetation {
             return id;
         }
         else {
-            return "Credenciais incorretas";
+            return "Credenciais incorretas" + password ;
         }
     }
     async dahsBoard() {
