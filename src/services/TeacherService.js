@@ -18,7 +18,7 @@ class TeacherServiceEmplementation {
                 teacher.password,
             ], (err, data) => {
                 if (err) {
-                    reject("already exist" , err);
+                    reject(err);
                     return;
                 }
                 else {
