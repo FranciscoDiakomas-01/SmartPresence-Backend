@@ -86,20 +86,12 @@ const TeacherController = {
     },
     getbyid: async function (req, res) {
         const token = req.body.token;
-        if ((0, isTeacher_1.default)(token) || (0, isAdmin_1.default)(token)) {
-            const id = Number(req.body.userid);
+       const id = Number(req.body.userid);
             const data = await TeacherService_1.default.getbyid(id);
             res.status(200).json({
                 data,
             });
             return;
-        }
-        else {
-            res.status(403).json({
-                msg: "doesnt have permition",
-            });
-            return;
-        }
     },
     create: async function (req, res) {
         const token = req.body.token;
